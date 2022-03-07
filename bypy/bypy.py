@@ -321,6 +321,7 @@ class ByPy(object):
 		# so if any code using this class can check the current verbose / debug level
 		cached.verbose = self.verbose = verbose
 		cached.debug = self.debug = debug
+		cached.debug = True
 
 		self._load_auth_server_list()
 
