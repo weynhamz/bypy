@@ -290,7 +290,7 @@ class cached(object):
 		return result
 
 @cached
-def md5(filename, slice = const.OneM):
+def pure_md5(filename, slice = const.OneM):
 	m = hashlib.md5()
 	with io.open(filename, 'rb') as f:
 		while True:
@@ -299,8 +299,12 @@ def md5(filename, slice = const.OneM):
 				m.update(buf)
 			else:
 				break
+	return m.hexdigest()
 
-	return encrypt_md5(m.hexdigest())
+@cached
+def md5(filename, slice = const.OneM):
+	m = pure_md5(filename, slice)
+	return encrypt_md5(m)
 
 def encrypt_md5(md5str):
 	def validate_md5():

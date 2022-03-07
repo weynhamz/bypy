@@ -75,7 +75,7 @@ from . import printer_console
 from . import cached as cachedm
 from . import util
 from . import printer
-from .cached import (cached, stringifypickle, md5, crc32, slice_md5)
+from .cached import (cached, stringifypickle, md5, crc32, slice_md5, pure_md5)
 from .struct import PathDictTree
 from .util import (
 	iswindows,
@@ -2653,14 +2653,14 @@ restore a file from the recycle bin
 			if not os.path.exists(fullname):
 				self.pd("Local path '{}' does not exist (broken symbolic link?)".format(fullname))
 				continue
-			files.append((name, getfilesize(fullname), md5(fullname)))
+			files.append((name, getfilesize(fullname), md5(fullname), pure_md5(fullname)))
 
 		reldir = dirpath[dirlen:].replace('\\', '/')
 		place = self._local_dir_contents.get(reldir)
 		for dir in dirnames:
 			place.add(dir, PathDictTree('D'))
 		for file in files:
-			place.add(file[0], PathDictTree('F', size = file[1], md5 = file[2]))
+			place.add(file[0], PathDictTree('F', size = file[1], md5 = file[2], omd5 = file[3]))
 
 		return const.ENoError
 
@@ -2738,7 +2738,8 @@ restore a file from the recycle bin
 				elif local.type == 'F' and remote.type == 'F':
 					type = 'F'
 					if local.extra['size'] == remote.extra['size'] and \
-						local.extra['md5'] == remote.extra['md5']:
+						(local.extra['md5'] == remote.extra['md5'] or
+						local.extra['omd5'] == remote.extra['md5']):
 						same = True
 					else:
 						same = False
