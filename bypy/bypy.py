@@ -2743,6 +2743,12 @@ restore a file from the recycle bin
 						local.extra['omd5'] == remote.extra['md5']):
 						same = True
 					else:
+						self.pv(p)
+						self.pv('local size  ' + str(local.extra['size']))
+						self.pv('remote size ' + str(remote.extra['size']))
+						self.pv('local md5   ' + local.extra['md5'])
+						self.pv('remote md5  ' + remote.extra['md5'])
+						self.pv('remote fmd5 ' + remote.extra['fmd5'])
 						same = False
 				else:
 					type = local.type + remote.type
