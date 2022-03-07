@@ -277,6 +277,7 @@ class cached(object):
 				if not entry:
 					del cached.cache[absdir]
 					pdbg("Empty directory '{}' in cache also removed.".format(absdir))
+				cached.dirty = True
 			else:
 				notfound()
 		else:

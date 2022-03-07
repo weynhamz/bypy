@@ -2814,6 +2814,7 @@ directory is much larger than the local one). it defaults to False.
 			if subresult != const.ENoError:
 				result = subresult
 		else: # " t == 'F' " must be true
+			cached.remove(lcpath)
 			result = self._downfile(rcpath, lcpath)
 
 		return result
